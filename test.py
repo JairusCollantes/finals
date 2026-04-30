@@ -1,11 +1,13 @@
 import mysql.connector
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
 try:
     conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="jairus", # check if this is correct!
-        database="poker"
+        host=os.getenv("DB_HOST"),
+        user = os.getenv("DB_USER"),
+        password = os.getenv("DB_PASSWORD"),
+        database = os.getenv("DB_NAME")
     )
     print("Connection Successful!")
     cursor = conn.cursor()
