@@ -16,6 +16,9 @@ def card(s):
 
 class HandEvaluator:
     @staticmethod
+    # The hand evaluator, this will find the best 5 card combination to 
+    # all the cards that are given, from the player sto the community cards
+    # and the opponent's hand if known. It will return a tuple of (rank, high_cards)
     def evaluate(cards):
         if len(cards) < 5:
             return (0, ())
@@ -27,23 +30,27 @@ class HandEvaluator:
         return best
 
     @staticmethod
+    #Will evaluate the 5 cards
     def _eval_5(cards):
-        # Extract rank correctly for "10" (two characters)
-        ranks = [c[:-1] for c in cards]          # "10H" → "10"
-        suits = [c[-1]  for c in cards]          # "10H" → "H"
+
+        ranks = [c[:-1] for c in cards]
+        suits = [c[-1]  for c in cards] 
         vals = sorted([HAND_RANKS[r] for r in ranks], reverse=True)
         
         is_flush = len(set(suits)) == 1
         unique = sorted(set(vals), reverse=True)
         is_straight = False
         straight_high = None
+        
+        # Check for normal straight (5 distinct consecutive values)
         if len(unique) == 5 and unique[0] - unique[-1] == 4:
             is_straight = True
             straight_high = unique[0]
-        elif set(vals) == {12, 0, 1, 2, 3}:   # Ace-low straight
+        elif set(vals) == {12, 0, 1, 2, 3}:
             is_straight = True
-            straight_high = 3                  # 5 is high card
-
+            straight_high = 3
+            
+        #count occurrences of each rank
         cnt = Counter(vals)
         counts = sorted(cnt.values(), reverse=True)
 
@@ -75,8 +82,12 @@ class HandEvaluator:
             return (2, (p, *kk))
         else:
             return (1, tuple(sorted(vals, reverse=True)))
+        #This looks really complicated but it's just checking for each hand type in order of strength,
+        #and returning a tuple that allows us to compare hands easily.
 
 class RangeAnalyzer:
+    #makes the hand for the opponent
+    #using the history 
     def __init__(self, db):
         self.db = db
 
@@ -94,6 +105,9 @@ class RangeAnalyzer:
         available = [c for c in FULL_DECK if c not in used]
         return list(itertools.combinations(available, 2))
 
+
+#This is awesome, this compares your hand to
+#all possible opponent hands (filtered by history) and calculates the probability of winning.
 def calc_win_probability(my_hand, community, opponent_range):
     my_rank, my_high = HandEvaluator.evaluate(my_hand + community)
     wins = 0
@@ -105,6 +119,9 @@ def calc_win_probability(my_hand, community, opponent_range):
         total += 1
     return wins / total if total > 0 else 0.5
 
+#game class to manage the state of the game,
+#including the player's hand, the AI's hand, etc,
+#Also returns the winner in the showdown
 class PokerGame:
     def __init__(self, player_chips=1000, ai_chips=1000):
         self.player_chips = player_chips
