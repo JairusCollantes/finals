@@ -28,7 +28,7 @@ class HandEvaluator:
 
     @staticmethod
     def _eval_5(cards):
-        vals = sorted([RANK_VALUES[c[0]] for c in cards], reverse=True)
+        vals = sorted([HAND_RANKS[c[0]] for c in cards], reverse=True)
         suits = [c[1] for c in cards]
         is_flush = len(set(suits)) == 1
         unique = sorted(set(vals), reverse=True)
