@@ -93,7 +93,6 @@ class RangeAnalyzer:
         return list(itertools.combinations(available, 2))
 
 def calc_win_probability(my_hand, community, opponent_range):
-    """Combinatorics: count winning hands."""
     my_rank, my_high = HandEvaluator.evaluate(my_hand + community)
     wins = 0
     total = 0
