@@ -26,9 +26,10 @@ class App(QMainWindow):
         self.btn_start_game.clicked.connect(self.open_game)
         self.btn_history.clicked.connect(self.open_history)
         self.btn_reset.clicked.connect(self.clear_history)
-    
+        self.btn_exit.clicked.connect(self.close)
     def clear_history(self):
         self.db.clear_history()
+        
     def log(self, message):
         if hasattr(self, 'log_output'):
             self.log_output.appendPlainText(message)   # or .appendHtml() for colored text
@@ -58,34 +59,66 @@ class App(QMainWindow):
     def new_hand(self):
         self.game.new_hand()
         self.update_game_ui()
+        self.log("--- New hand ---")
+        self.log(f"Player: {self.game.player_hand[0]} {self.game.player_hand[1]}")
+        self.log(f"Pot: {self.game.pot}")
 
     def call(self):
         self.game.player_call()
+        self.log("Player calls")
         self.ai_turn()
         self.after_action()
 
     def fold(self):
         self.game.player_fold()
+        self.log("Player folds")
         self.save_result("fold")
-        self.update_game_ui()
+        self.after_action()          # <-- after_action already calls update_game_ui; we'll add auto-start there
 
     def raise_bet(self):
         self.game.player_raise(20)
+        self.log("Player raises to 20")
         self.ai_turn()
         self.after_action()
-    
+
     def ai_turn(self):
-        self.game.ai_decision()
+        decision = self.game.ai_decision()
+        self.log(f"AI {decision}s")
         if self.game.street < 3:
             self.game.deal_community()
+            if self.game.street == 1:
+                self.log("Flop dealt: " + " ".join(self.game.community[0:3]))
+            elif self.game.street == 2:
+                self.log("Turn: " + self.game.community[3])
+            elif self.game.street == 3:
+                self.log("River: " + self.game.community[4])
 
     def after_action(self):
         if self.game.street >= 3:
             result = self.game.showdown()
             self.save_result(result)
+            self.log(f"Showdown: Player {result} (Hand: {' '.join(self.game.player_hand)} vs AI: {' '.join(self.game.ai_hand)})")
+            self.log(f"Pot: {self.game.pot} awarded")
+            # You may also show community cards here; they're already visible.
 
         self.update_game_ui()
         self.update_probability()
+
+        # --- Auto start a new hand if this one is over ---
+        if self.game.hand_over:
+            self.log("Hand finished. Next hand in 2 seconds...")
+            # Disable action buttons to prevent clicks during wait
+            self.btn_call.setEnabled(False)
+            self.btn_fold.setEnabled(False)
+            self.btn_raise.setEnabled(False)
+            # Schedule new hand after 2 seconds
+            QTimer.singleShot(2000, self.auto_new_hand)
+
+    def auto_new_hand(self):
+        self.btn_call.setEnabled(True)
+        self.btn_fold.setEnabled(True)
+        self.btn_raise.setEnabled(True)
+        self.new_hand()
 
     def update_game_ui(self):
         state = self.game.get_state()

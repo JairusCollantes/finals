@@ -27,7 +27,10 @@
     <item>
      <widget class="QLabel" name="label_title">
       <property name="styleSheet">
-       <string notr="true">background-color: white</string>
+       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px
+</string>
       </property>
       <property name="text">
        <string>Your Past Hands</string>
@@ -85,7 +88,10 @@
       <item>
        <widget class="QPushButton" name="btn_load">
         <property name="styleSheet">
-         <string notr="true">background-color: white</string>
+         <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px
+</string>
         </property>
         <property name="text">
          <string>Load History</string>
@@ -95,7 +101,10 @@
       <item>
        <widget class="QPushButton" name="btn_back">
         <property name="styleSheet">
-         <string notr="true">background-color: white</string>
+         <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px
+</string>
         </property>
         <property name="text">
          <string>Back to Menu</string>
