@@ -7,9 +7,6 @@ load_dotenv()
 
 class DB:
     def __init__(self):
-        print("DB CLASS VERSION: 2.0 IS RUNNING")
-        print("DB INIT START 1")
-        print("TRY CONNECT")
         self.conn = mysql.connector.connect(
             host=os.getenv("DB_HOST"),
             user=os.getenv("DB_USER"),
@@ -17,9 +14,7 @@ class DB:
             database=os.getenv("DB_NAME"),
             connection_timeout=5
         )
-        self.cursor = self.conn.cursor()   # <-- add this line
-        print("CONNECTED")
-    # ---------------- CREATE ----------------
+        self.cursor = self.conn.cursor()
 
     def create_player(self, username, chips=1000):
         self.cursor.execute(

@@ -1,4 +1,3 @@
-print("HELLO WORLD")
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 from PyQt6 import uic
@@ -19,21 +18,20 @@ class App(QMainWindow):
         QTimer.singleShot(0, self.init_db)
 
     def init_db(self):
-        print("DB INIT START")
         self.db = DB()
-        print("DB READY")
+        
     def setup_menu(self):
         self.btn_start_game.clicked.connect(self.open_game)
         self.btn_history.clicked.connect(self.open_history)
         self.btn_reset.clicked.connect(self.clear_history)
         self.btn_exit.clicked.connect(self.close)
+        
     def clear_history(self):
         self.db.clear_history()
         
     def log(self, message):
         if hasattr(self, 'log_output'):
-            self.log_output.appendPlainText(message)   # or .appendHtml() for colored text
-            # Auto-scroll to latest entry
+            self.log_output.appendPlainText(message)
             self.log_output.verticalScrollBar().setValue(
                 self.log_output.verticalScrollBar().maximum()
             )
@@ -46,7 +44,7 @@ class App(QMainWindow):
             self.game = PokerGame()
             self.range = RangeAnalyzer(self.db)
 
-        self.game.new_hand()  # 🔥 IMPORTANT
+        self.game.new_hand()
 
         self.btn_new_hand.clicked.connect(self.new_hand)
         self.btn_call.clicked.connect(self.call)
@@ -99,19 +97,15 @@ class App(QMainWindow):
             self.save_result(result)
             self.log(f"Showdown: Player {result} (Hand: {' '.join(self.game.player_hand)} vs AI: {' '.join(self.game.ai_hand)})")
             self.log(f"Pot: {self.game.pot} awarded")
-            # You may also show community cards here; they're already visible.
 
         self.update_game_ui()
         self.update_probability()
 
-        # --- Auto start a new hand if this one is over ---
         if self.game.hand_over:
             self.log("Hand finished. Next hand in 2 seconds...")
-            # Disable action buttons to prevent clicks during wait
             self.btn_call.setEnabled(False)
             self.btn_fold.setEnabled(False)
             self.btn_raise.setEnabled(False)
-            # Schedule new hand after 2 seconds
             QTimer.singleShot(2000, self.auto_new_hand)
 
     def auto_new_hand(self):
