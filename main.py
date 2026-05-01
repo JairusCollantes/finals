@@ -161,7 +161,10 @@ class App(QMainWindow):
             player_cards="".join(self.game.player_hand),
             community_cards="".join(self.game.community),
             result=result,
-            probability=0.5,
+            probability=calc_win_probability(
+                self.game.player_hand,
+                self.game.community,
+                self.range.get_opponent_range(2, self.game.player_hand + self.game.community)),
             pot=self.game.pot
         )
 
@@ -192,17 +195,9 @@ if __name__ == "__main__":
     import traceback
 
     try:
-        print("START")
-
         app = QApplication(sys.argv)
-        print("APP CREATED")
-
         window = App()
-        print("WINDOW CREATED")
-
         window.show()
-        print("SHOW CALLED")
-
         sys.exit(app.exec())
 
     except Exception as e:
