@@ -7,19 +7,18 @@ load_dotenv()
 
 class DB:
     def __init__(self):
-        try:
-            self.conn = mysql.connector.connect(
-                host=os.getenv("DB_HOST"),
-                user=os.getenv("DB_USER"),
-                password=os.getenv("DB_PASSWORD"),
-                database=os.getenv("DB_NAME")
-            )
-            self.cursor = self.conn.cursor()
-        except mysql.connector.Error as e:
-            print("Database connection failed:", e)
-            self.conn = None
-            self.cursor = None
-
+        print("DB CLASS VERSION: 2.0 IS RUNNING")
+        print("DB INIT START 1")
+        print("TRY CONNECT")
+        self.conn = mysql.connector.connect(
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_NAME"),
+            connection_timeout=5
+        )
+        self.cursor = self.conn.cursor()   # <-- add this line
+        print("CONNECTED")
     # ---------------- CREATE ----------------
 
     def create_player(self, username, chips=1000):
@@ -59,15 +58,13 @@ class DB:
     def get_opponent_hands(self, opponent_id, limit=500):
         self.cursor.execute(
             """SELECT DISTINCT player_cards
-               FROM history
-               WHERE opponent_id = %s
-               ORDER BY game_date DESC
-               LIMIT %s""",
+            FROM history
+            WHERE opponent_id = %s
+            LIMIT %s""",
             (opponent_id, limit)
         )
         rows = self.cursor.fetchall()
         return [r[0] for r in rows]
-
     def update_chips(self, player_id, chips):
         self.cursor.execute(
             "UPDATE players SET chips = %s WHERE player_id = %s",

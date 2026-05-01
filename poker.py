@@ -213,3 +213,12 @@ class PokerGame:
             result = 'tie'
         self.hand_over = True
         return result
+    def get_state(self):
+        return {
+            "player_hand": self.player_hand,
+            "ai_hand": self.ai_hand,
+            "community": self.community,
+            "pot": self.pot,
+            "player_chips": self.player_chips,
+            "ai_chips": self.ai_chips
+        }
