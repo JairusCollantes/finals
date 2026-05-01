@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
-
  <widget class="QMainWindow" name="MainWindow">
-  <property name="windowTitle">
-   <string>Poker Probability Trainer</string>
-  </property>
-
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,17 +10,20 @@
     <height>450</height>
    </rect>
   </property>
-
+  <property name="windowTitle">
+   <string>Poker Probability Trainer</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:rgb(0, 0, 0)</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="mainLayout">
-
-    <!-- Spacer top -->
     <item>
      <spacer name="topSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeHint">
+      <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
         <height>40</height>
@@ -33,8 +31,6 @@
       </property>
      </spacer>
     </item>
-
-    <!-- Title -->
     <item alignment="Qt::AlignHCenter">
      <widget class="QLabel" name="label_title">
       <property name="font">
@@ -43,15 +39,23 @@
         <bold>true</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255,0);
+color:rgb(255, 255, 255)</string>
+      </property>
       <property name="text">
-       <string>Poker Probability Trainer</string>
+       <string>Poker Probability</string>
       </property>
      </widget>
     </item>
     <item alignment="Qt::AlignHCenter">
      <widget class="QLabel" name="label_subtitle">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255,0);
+color:rgb(255, 255, 255)</string>
+      </property>
       <property name="text">
-       <string>Train poker decisions using probability vs AI</string>
+       <string>Trust the statistic</string>
       </property>
      </widget>
     </item>
@@ -60,7 +64,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeHint">
+      <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
         <height>30</height>
@@ -70,18 +74,23 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_start_game">
-      <property name="minimumHeight">
-       <number>45</number>
+      <property name="styleSheet">
+       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px
+</string>
       </property>
       <property name="text">
-       <string>Start Training</string>
+       <string>Play</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="btn_history">
-      <property name="minimumHeight">
-       <number>45</number>
+      <property name="styleSheet">
+       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px</string>
       </property>
       <property name="text">
        <string>Hand History</string>
@@ -90,8 +99,10 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_reset">
-      <property name="minimumHeight">
-       <number>45</number>
+      <property name="styleSheet">
+       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px</string>
       </property>
       <property name="text">
        <string>Reset Progress</string>
@@ -103,7 +114,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeHint">
+      <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
         <height>30</height>
@@ -113,8 +124,10 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_exit">
-      <property name="minimumHeight">
-       <number>40</number>
+      <property name="styleSheet">
+       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px</string>
       </property>
       <property name="text">
        <string>Exit</string>
@@ -126,7 +139,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeHint">
+      <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
         <height>40</height>

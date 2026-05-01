@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Poker Table</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: black</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="mainLayout">
     <item>
@@ -24,6 +27,9 @@
           <width>50</width>
           <height>70</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
         </property>
         <property name="text">
          <string/>
@@ -38,6 +44,9 @@
           <height>70</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -50,6 +59,9 @@
           <width>50</width>
           <height>70</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
         </property>
         <property name="text">
          <string/>
@@ -64,6 +76,9 @@
           <height>70</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -77,6 +92,9 @@
           <height>70</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -86,6 +104,9 @@
     </item>
     <item>
      <widget class="QLabel" name="lbl_pot">
+      <property name="styleSheet">
+       <string notr="true">background-color: white</string>
+      </property>
       <property name="text">
        <string>Pot: 0</string>
       </property>
@@ -101,6 +122,9 @@
           <height>70</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -114,6 +138,9 @@
           <height>70</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -121,6 +148,9 @@
       </item>
       <item>
        <widget class="QLabel" name="lbl_player_chips">
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string>Chips: 1000</string>
         </property>
@@ -132,6 +162,9 @@
      <layout class="QHBoxLayout" name="actionButtonsLayout">
       <item>
        <widget class="QPushButton" name="btn_fold">
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string>Fold</string>
         </property>
@@ -139,6 +172,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_call">
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string>Call</string>
         </property>
@@ -146,6 +182,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_raise">
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string>Raise 20</string>
         </property>
@@ -153,6 +192,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_new_hand">
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string>New Hand</string>
         </property>
@@ -167,6 +209,9 @@
         <bold>true</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: white</string>
+      </property>
       <property name="text">
        <string>Probability: —</string>
       </property>
@@ -174,6 +219,9 @@
     </item>
     <item>
      <widget class="QLabel" name="lbl_ai_chips">
+      <property name="styleSheet">
+       <string notr="true">background-color: white</string>
+      </property>
       <property name="text">
        <string>Opponent chips: 1000</string>
       </property>
@@ -181,6 +229,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_back">
+      <property name="styleSheet">
+       <string notr="true">background-color: white</string>
+      </property>
       <property name="text">
        <string>Back to Menu</string>
       </property>

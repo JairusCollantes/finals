@@ -19,10 +19,16 @@
   <property name="windowTitle">
    <string>Hand History</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:black</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="historyLayout">
     <item>
      <widget class="QLabel" name="label_title">
+      <property name="styleSheet">
+       <string notr="true">background-color: white</string>
+      </property>
       <property name="text">
        <string>Your Past Hands</string>
       </property>
@@ -30,6 +36,9 @@
     </item>
     <item>
      <widget class="QTableWidget" name="table_history">
+      <property name="styleSheet">
+       <string notr="true">background-color: gray</string>
+      </property>
       <property name="columnCount">
        <number>6</number>
       </property>
@@ -75,6 +84,9 @@
      <layout class="QHBoxLayout" name="buttonLayout">
       <item>
        <widget class="QPushButton" name="btn_load">
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string>Load History</string>
         </property>
@@ -82,6 +94,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_back">
+        <property name="styleSheet">
+         <string notr="true">background-color: white</string>
+        </property>
         <property name="text">
          <string>Back to Menu</string>
         </property>

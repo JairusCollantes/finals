@@ -44,7 +44,6 @@ class HandEvaluator:
         cnt = Counter(vals)
         counts = sorted(cnt.values(), reverse=True)
 
-        # Formal logic cascade
         if is_flush and is_straight:
             return (9, (straight_high,))
         elif counts == [4,1]:
