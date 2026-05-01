@@ -28,8 +28,11 @@ class HandEvaluator:
 
     @staticmethod
     def _eval_5(cards):
-        vals = sorted([HAND_RANKS[c[0]] for c in cards], reverse=True)
-        suits = [c[1] for c in cards]
+        # Extract rank correctly for "10" (two characters)
+        ranks = [c[:-1] for c in cards]          # "10H" → "10"
+        suits = [c[-1]  for c in cards]          # "10H" → "H"
+        vals = sorted([HAND_RANKS[r] for r in ranks], reverse=True)
+        
         is_flush = len(set(suits)) == 1
         unique = sorted(set(vals), reverse=True)
         is_straight = False
@@ -37,9 +40,9 @@ class HandEvaluator:
         if len(unique) == 5 and unique[0] - unique[-1] == 4:
             is_straight = True
             straight_high = unique[0]
-        elif set(vals) == {12,0,1,2,3}:
+        elif set(vals) == {12, 0, 1, 2, 3}:   # Ace-low straight
             is_straight = True
-            straight_high = 3
+            straight_high = 3                  # 5 is high card
 
         cnt = Counter(vals)
         counts = sorted(cnt.values(), reverse=True)

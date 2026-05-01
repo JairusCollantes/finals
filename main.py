@@ -25,8 +25,17 @@ class App(QMainWindow):
     def setup_menu(self):
         self.btn_start_game.clicked.connect(self.open_game)
         self.btn_history.clicked.connect(self.open_history)
-       # self.btn_add_player.clicked.connect(self.add_player)
-        
+        self.btn_reset.clicked.connect(self.clear_history)
+    
+    def clear_history(self):
+        self.db.clear_history()
+    def log(self, message):
+        if hasattr(self, 'log_output'):
+            self.log_output.appendPlainText(message)   # or .appendHtml() for colored text
+            # Auto-scroll to latest entry
+            self.log_output.verticalScrollBar().setValue(
+                self.log_output.verticalScrollBar().maximum()
+            )
     def open_game(self):
         uic.loadUi("ui/game.ui", self)
         self.setup_game()
@@ -45,6 +54,7 @@ class App(QMainWindow):
         self.btn_back.clicked.connect(self.back_to_menu)
 
         self.update_game_ui()
+        
     def new_hand(self):
         self.game.new_hand()
         self.update_game_ui()
