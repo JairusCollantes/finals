@@ -16,38 +16,91 @@ def card(s):
 
 class HandEvaluator:
     @staticmethod
-    def evaluate_hand(hole_cards, community_cards):
-        all_cards = hole_cards + community_cards
-        best_rank = 0
-        for combo in itertools.combinations(all_cards, 5):
-            rank = HandEvaluator.rank_hand(combo)
-            best_rank = max(best_rank, rank)
-        return best_rank
+    def evaluate(cards):
+        if len(cards) < 5:
+            return (0, ())
+        best = (0, ())
+        for combo in itertools.combinations(cards, 5):
+            r, h = HandEvaluator._eval_5(combo)
+            if r > best[0] or (r == best[0] and h > best[1]):
+                best = (r, h)
+        return best
 
     @staticmethod
-    def rank_hand(cards):
-        ranks = sorted([HAND_RANKS[c[:-1]] for c in cards], reverse=True)
-        suits = [c[-1] for c in cards]
+    def _eval_5(cards):
+        vals = sorted([RANK_VALUES[c[0]] for c in cards], reverse=True)
+        suits = [c[1] for c in cards]
         is_flush = len(set(suits)) == 1
-        is_straight = ranks == list(range(ranks[0], ranks[0] - 5, -1))
-        rank_counts = Counter(ranks).values()
+        unique = sorted(set(vals), reverse=True)
+        is_straight = False
+        straight_high = None
+        if len(unique) == 5 and unique[0] - unique[-1] == 4:
+            is_straight = True
+            straight_high = unique[0]
+        elif set(vals) == {12,0,1,2,3}:
+            is_straight = True
+            straight_high = 3
 
-        if is_straight and is_flush and ranks[0] == HAND_RANKS['A']:
-            return 10  # Royal Flush
-        if is_straight and is_flush:
-            return 9   # Straight Flush
-        if 4 in rank_counts:
-            return 8   # Four of a Kind
-        if 3 in rank_counts and 2 in rank_counts:
-            return 7   # Full House
-        if is_flush:
-            return 6   # Flush
-        if is_straight:
-            return 5   # Straight
-        if 3 in rank_counts:
-            return 4   # Three of a Kind
-        if list(rank_counts).count(2) == 2:
-            return 3   # Two Pair
-        if 2 in rank_counts:
-            return 2   # One Pair
-        return 1       # High Card
+        cnt = Counter(vals)
+        counts = sorted(cnt.values(), reverse=True)
+
+        # Formal logic cascade
+        if is_flush and is_straight:
+            return (9, (straight_high,))
+        elif counts == [4,1]:
+            q = [k for k,v in cnt.items() if v==4][0]
+            k = [k for k in cnt if cnt[k]==1][0]
+            return (8, (q, k))
+        elif counts == [3,2]:
+            t = [k for k,v in cnt.items() if v==3][0]
+            p = [k for k,v in cnt.items() if v==2][0]
+            return (7, (t, p))
+        elif is_flush:
+            return (6, tuple(sorted(vals, reverse=True)))
+        elif is_straight:
+            return (5, (straight_high,))
+        elif counts == [3,1,1]:
+            t = [k for k,v in cnt.items() if v==3][0]
+            kk = sorted([k for k in cnt if cnt[k]==1], reverse=True)
+            return (4, (t, *kk))
+        elif counts == [2,2,1]:
+            pairs = sorted([k for k,v in cnt.items() if v==2], reverse=True)
+            kk = [k for k in cnt if cnt[k]==1][0]
+            return (3, (pairs[0], pairs[1], kk))
+        elif counts == [2,1,1,1]:
+            p = [k for k,v in cnt.items() if v==2][0]
+            kk = sorted([k for k in cnt if cnt[k]==1], reverse=True)
+            return (2, (p, *kk))
+        else:
+            return (1, tuple(sorted(vals, reverse=True)))
+
+class RangeAnalyzer:
+    def __init__(self, db):
+        self.db = db
+
+    def get_opponent_range(self, opponent_id, known_cards):
+        used = set(known_cards)
+        if self.db:
+            hist = self.db.get_opponent_hands(opponent_id, 200)
+            hands_set = set()
+            for h in hist:
+                c = card(h)
+                if len(c) == 2:
+                    hands_set.add(tuple(sorted(c)))
+            if hands_set:
+                return [c for c in hands_set if not set(c) & used]
+        available = [c for c in FULL_DECK if c not in used]
+        return list(itertools.combinations(available, 2))
+
+def calc_win_probability(my_hand, community, opponent_range):
+    """Combinatorics: count winning hands."""
+    my_rank, my_high = HandEvaluator.evaluate(my_hand + community)
+    wins = 0
+    total = 0
+    for opp in opponent_range:
+        opp_rank, opp_high = HandEvaluator.evaluate(list(opp) + community)
+        if my_rank > opp_rank or (my_rank == opp_rank and my_high > opp_high):
+            wins += 1
+        total += 1
+    return wins / total if total > 0 else 0.5
+
