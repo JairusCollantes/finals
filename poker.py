@@ -103,3 +103,114 @@ def calc_win_probability(my_hand, community, opponent_range):
         total += 1
     return wins / total if total > 0 else 0.5
 
+class PokerGame:
+    def __init__(self, player_chips=1000, ai_chips=1000):
+        self.player_chips = player_chips
+        self.ai_chips = ai_chips
+        self.deck = []
+        self.player_hand = []
+        self.ai_hand = []
+        self.community = []
+        self.pot = 0
+        self.current_bet = 0
+        self.player_bet_this_round = 0
+        self.ai_bet_this_round = 0
+        self.street = 0 
+        self.hand_over = True
+
+    def new_hand(self):
+        if self.player_chips <= 0 or self.ai_chips <= 0:
+            return False
+        self.deck = FULL_DECK[:]
+        random.shuffle(self.deck)
+        self.player_hand = [self.deck.pop(), self.deck.pop()]
+        self.ai_hand = [self.deck.pop(), self.deck.pop()]
+        self.community = []
+        self.pot = 0
+        self.current_bet = 10         
+        self.player_bet_this_round = 5
+        self.ai_bet_this_round = 10
+        self.player_chips -= 5
+        self.ai_chips -= 10
+        self.pot = 15
+        self.street = 0
+        self.hand_over = False
+        return True
+
+    def deal_community(self):
+        if self.street == 0:
+            self.deck.pop()
+            self.community += [self.deck.pop() for _ in range(3)]  # flop
+            self.street = 1
+        elif self.street == 1:
+            self.deck.pop()
+            self.community.append(self.deck.pop())  # turn
+            self.street = 2
+        elif self.street == 2:
+            self.deck.pop()
+            self.community.append(self.deck.pop())  # river
+            self.street = 3
+        self.player_bet_this_round = 0
+        self.ai_bet_this_round = 0
+        self.current_bet = 0
+
+    def player_fold(self):
+        self.ai_chips += self.pot
+        self.hand_over = True
+        return 'fold'
+
+    def player_call(self):
+        diff = self.current_bet - self.player_bet_this_round
+        self.player_chips -= diff
+        self.pot += diff
+        self.player_bet_this_round = self.current_bet
+        return 'call'
+
+    def player_raise(self, amount=20):
+        self.current_bet = amount
+        diff = amount - self.player_bet_this_round
+        self.player_chips -= diff
+        self.pot += diff
+        self.player_bet_this_round = amount
+        return 'raise'
+
+    def ai_decision(self):
+        if len(self.community) >= 3:
+            rank, _ = HandEvaluator.evaluate(self.ai_hand + self.community)
+        else:
+            rank = 0
+        if random.random() < rank / 15: 
+            self.ai_raise(20)
+            return 'raise'
+        else:
+            self.ai_call()
+            return 'call'
+
+    def ai_call(self):
+        diff = self.current_bet - self.ai_bet_this_round
+        self.ai_chips -= diff
+        self.pot += diff
+        self.ai_bet_this_round = self.current_bet
+
+    def ai_raise(self, amount=20):
+        self.current_bet = amount
+        diff = amount - self.ai_bet_this_round
+        self.ai_chips -= diff
+        self.pot += diff
+        self.ai_bet_this_round = amount
+
+    def showdown(self):
+        player_rank, player_high = HandEvaluator.evaluate(self.player_hand + self.community)
+        ai_rank, ai_high = HandEvaluator.evaluate(self.ai_hand + self.community)
+        if player_rank > ai_rank or (player_rank == ai_rank and player_high > ai_high):
+            self.player_chips += self.pot
+            result = 'win'
+        elif player_rank < ai_rank or (player_rank == ai_rank and player_high < ai_high):
+            self.ai_chips += self.pot
+            result = 'loss'
+        else:
+            self.player_chips += self.pot // 2
+            self.ai_chips += self.pot - self.pot // 2
+            result = 'tie'
+        self.hand_over = True
+        return result
