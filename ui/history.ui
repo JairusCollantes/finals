@@ -99,6 +99,32 @@ font-size: 14px
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btn_save">
+        <property name="styleSheet">
+         <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px
+</string>
+        </property>
+        <property name="text">
+         <string>Save History</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_delete">
+        <property name="styleSheet">
+         <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));
+color: white;
+font-size: 14px
+</string>
+        </property>
+        <property name="text">
+         <string>Delete History</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="btn_back">
         <property name="styleSheet">
          <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(125, 125, 125, 255), stop:0.5 rgb(63, 63, 63), stop: 1 rgb(0, 0, 0));

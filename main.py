@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 from PyQt6 import uic
-from PyQt6.QtCore import QTimer
+from PyQt6.QtCore import QTimer, Qt
 from db import DB
 from poker import PokerGame, calc_win_probability, RangeAnalyzer
 
@@ -179,17 +179,52 @@ class App(QMainWindow):
     def setup_history(self):
         self.btn_load.clicked.connect(self.load_history)
         self.btn_back.clicked.connect(self.back_to_menu)
+        self.btn_save.clicked.connect(self.save_history)
+        self.btn_delete.clicked.connect(self.delete_history)
+        
+
+    def save_history(self):
+        for row in range(self.table_history.rowCount()):
+            history_id = self.table_history.item(row, 6)
+            if not history_id:
+                continue
+            history_id = int(history_id.text())
+            result = self.table_history.item(row, 2).text()
+            prob_item = self.table_history.item(row, 3)
+            
+            try:
+                prob = float(prob_item.text().rstrip('%')) / 100 if "%" in prob_item.text() else float(prob_item.text())
+            except ValueError:
+                prob = 0.0
+            
+            self.db.update_history(history_id, result, prob)
+    
+    def delete_history(self):
+        selected = set(idx.row() for idx in self.table_history.selectedIndexes())
+        for row in reversed(sorted(selected)):
+            history_id = self.table_history.item(row, 6)
+            if history_id:
+                self.db.delete_history(int(history_id.text()))
+                self.table_history.removeRow(row)
+        self.load_history()
     
     def load_history(self):
         data = self.db.get_player_history(1)
 
         self.table_history.setRowCount(len(data))
-
+        self.table_history.setColumnCount(7)
+        
         for r, row in enumerate(data):
-            for c, value in enumerate(row):
+            history_id = row[0]
+            for c in range(1,len(row)):
+                item = QTableWidgetItem(str(row[c]))
                 self.table_history.setItem(
-                    r, c, QTableWidgetItem(str(value))
-                )
+                    r, c-1, item)
+                
+            id_item = QTableWidgetItem(str(history_id))
+            id_item.setFlags(id_item.flags() | Qt.ItemFlag.ItemIsEditable)
+            self.table_history.setItem(r, 6, id_item)
+        self.table_history.setColumnHidden(6, True)
 
 if __name__ == "__main__":
     import traceback

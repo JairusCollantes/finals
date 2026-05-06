@@ -40,7 +40,7 @@ class DB:
 
     def get_player_history(self, player_id):
         self.cursor.execute(
-            """SELECT hh.player_cards, hh.community_cards, hh.result,
+            """SELECT hh.history_id, hh.player_cards, hh.community_cards, hh.result,
                       hh.win_probability, hh.game_date, p.username
                FROM history hh
                JOIN players p ON hh.opponent_id = p.player_id
@@ -49,6 +49,15 @@ class DB:
             (player_id,)
         )
         return self.cursor.fetchall()
+    
+    def update_history(self, history_id, result, probability):
+        self.cursor.execute(
+            """UPDATE history
+               SET result = %s, win_probability = %s
+               WHERE history_id = %s""",
+            (result, probability, history_id)
+        )
+        self.conn.commit()
 
     def get_opponent_hands(self, opponent_id, limit=500):
         self.cursor.execute(
