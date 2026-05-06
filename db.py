@@ -99,4 +99,3 @@ class DB:
             self.cursor.close()
         if self.conn:
             self.conn.close()
-            
